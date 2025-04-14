@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecretSend - Anonymous Messaging</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1fa269, #1d9bbd);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 32px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #11ce9f;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        
+        .description {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #666;
+            font-size: 16px;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        textarea {
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            min-height: 150px;
+            margin-bottom: 20px;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            border-color: #35bd99;
+            outline: none;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #1fa269, #1d9bbd);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 105, 189, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .sent-message {
+            text-align: center;
+            margin-top: 20px;
+            color: #4CAF50;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">SecretSend</div>
+        <h1>Anonymous Messaging</h1>
+        <p class="description">Send any message anonymously. The recipient won't know who sent it!</p>
+        
+        <!-- Replace YOUR_FORMSPREE_ENDPOINT with your actual Formspree endpoint -->
+        <form id="messageForm" action="https://formspree.io/f/xkgjewve" method="POST">
+            <textarea name="message" placeholder="Type your anonymous message here..." required></textarea>
+            <button type="submit">SecretSend</button>
+        </form>
+        
+        <div id="sentMessage" class="sent-message">
+            Message sent successfully!
+        </div>
+        
+        <div class="footer">
+            SecretSend © 2025 | Send confidential messages anytime
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('messageForm');
+        const sentMessage = document.getElementById('sentMessage');
+        
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Show success message
+                    form.reset();
+                    sentMessage.style.display = 'block';
+                    
+                    // Hide success message after 3 seconds
+                    setTimeout(() => {
+                        sentMessage.style.display = 'none';
+                    }, 3000);
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was a problem sending your message. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>
